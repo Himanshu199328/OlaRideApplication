@@ -5,21 +5,23 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.List;
 
 
 public class MyRides extends AppCompatActivity {
-    EditText editText;
+    TextView textView;
 
     MYSQLiteHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_rides);
-        editText = (EditText)findViewById(R.id.editText7);
+        textView = (TextView) findViewById(R.id.textView7);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -35,9 +37,11 @@ public class MyRides extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+
         List<Display> userRides = db.getAllDisplay();
-        editText.setText(String.valueOf(userRides.size()));
-        System.out.println("................................................." + "Himanshu" + userRides.size());
+        textView.setText("Total User Rides : " + userRides.size());
+//        System.out.println("................................................." + "Himanshu" + userRides.size());
     }
 
 }

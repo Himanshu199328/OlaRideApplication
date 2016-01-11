@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
     private static final String DATABASE_NAME = "db";
     private static final String TABLE_DISPLAYS = "displays";
     private static final String KEY_ID = "id";
-    private static final String KEY_USERNAME = "USERNAME";
+    private static final String KEY_USERNAME = "username";//name should be small letters
     private static final String KEY_MOBILENUMBER = "mobilenumber";
     private static final String KEY_STARTINGPLACE = "startingplace";
     private static final String KEY_RIDEDISTANCE = "ridedistance";
@@ -37,15 +38,15 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_DISPLAY_TABLE = "CREATE TABLE DISPLAYS ( " +
+        String CREATE_DISPLAY_TABLE = "CREATE TABLE displays ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "USERNAME TEXT, "+
-                "MOBILENUMBER TEXT,"+
-                "STARTINGPLACE TEXT,"+
-                "RIDEDISTANCE TEXT,"+
-                "TIMETAKEN TEXT,"+
-                "WAITING TIME TEXT,"+
-                "CABTYPE TEXT)";
+                "username TEXT, "+
+                "mobilenumber TEXT,"+
+                "startingplace TEXT,"+
+                "ridedistance TEXT,"+
+                "timetaken TEXT,"+
+                "waitingtime TEXT,"+
+                "cabtype TEXT)";
         db.execSQL(CREATE_DISPLAY_TABLE);
     }
 
@@ -62,10 +63,11 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
         values.put(KEY_MOBILENUMBER, display.getMobilenumber());
         values.put(KEY_STARTINGPLACE, display.getStartingplace());
         values.put(KEY_RIDEDISTANCE,display.getRidedistance() );
-        values.put(KEY_TIMETAKEN, display.getWaitingtime());
-        values.put(KEY_WAITINGTIME, display.getTimetaken());
+        values.put(KEY_TIMETAKEN,display.getTimetaken());
+        values.put(KEY_WAITINGTIME, display.getWaitingtime());
         values.put(KEY_CABTYPE, display.getCabtype());
         db.insert(TABLE_DISPLAYS, null, values);
+
         db.close();
     }
 
@@ -75,7 +77,7 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
         if (cursor != null)
             cursor.moveToFirst();
         Display display = new Display();
-        display.setId(Integer.parseInt(cursor.getString(0)));
+        display.setId(cursor.getInt(0));
         display.setUsername(cursor.getString(1));
         display.setMobilenumber(cursor.getString(2));
         display.setStartingplace(cursor.getString(2));
@@ -87,12 +89,12 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
       return display;
     }
     public List<Display> getAllDisplay() {
-        List<Display> display = new LinkedList<Display>();
+        List<Display> display = new ArrayList<Display>();
         String query = "SELECT  * FROM " + TABLE_DISPLAYS;
 
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query,null);
 
 
         Display Display = null;
@@ -102,16 +104,18 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
                 Display.setId(Integer.parseInt(cursor.getString(0)));
                 Display.setUsername(cursor.getString(1));
                 Display.setMobilenumber(cursor.getString(2));
-                Display.setStartingplace(cursor.getString(2));
-                Display.setRidedistance(cursor.getString(2));
-                Display.setWaitingtime(cursor.getString(2));
-                Display.setTimetaken(cursor.getString(2));
-                Display.setCabtype(cursor.getString(2));
+                Display.setStartingplace(cursor.getString(3));
+                Display.setRidedistance(cursor.getString(4));
+                Display.setWaitingtime(cursor.getString(5));
+                Display.setTimetaken(cursor.getString(6));
+                Display.setCabtype(cursor.getString(7));
                 display.add(Display);
-            } while (cursor.moveToNext());
+            }
+            while (cursor.moveToNext());
         }
 
-        Log.d("getAllDisplays()", display.toString());
+        db.close();
+        cursor.close();
         return display;
     }
 
