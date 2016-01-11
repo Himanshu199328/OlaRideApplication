@@ -1,10 +1,8 @@
 package easyway2in.com.mynewapplication;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,9 +13,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -34,7 +30,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -51,11 +46,14 @@ public class ThirdActivity extends AppCompatActivity
     protected LocationManager locationManager;
     protected LocationListener locationListener;
     EditText loca;
+    MYSQLiteHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.third_layout);
+         db = new MYSQLiteHelper(this);
+        
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -265,20 +263,30 @@ public class ThirdActivity extends AppCompatActivity
     }
 
     public void clickOnRideNow(View view){
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(ThirdActivity.this);
-        builder1.setMessage("Your Ride has been booked");
-        builder1.setCancelable(true);
+//        AlertDialog.Builder builder1 = new AlertDialog.Builder(ThirdActivity.this);
+//        builder1.setMessage("Your Ride has been booked");
+//        builder1.setCancelable(true);
+//
+//        builder1.setPositiveButton(
+//                "OK",
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        dialog.cancel();
+//                    }
+//                });
+//
+//        AlertDialog alert11 = builder1.create();
+//        alert11.show();
 
-        builder1.setPositiveButton(
-                "OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
+        Display userDetails = new Display();
+        userDetails.setMobilenumber(sharedPreferences.getString(MainActivity.mobileNumberKey, "android"));
+        userDetails.setCabtype("Mini");
+        userDetails.setRidedistance("50km");
+        userDetails.setUsername(sharedPreferences.getString(MainActivity.firstNameKey, "android"));
+        userDetails.setTimetaken("20 mins");
+        userDetails.setWaitingtime("5min");
+        userDetails.setStartingplace("Gachibowli");
+        db.addDisplay(userDetails);
     }
 
 }
