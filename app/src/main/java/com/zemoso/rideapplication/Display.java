@@ -1,4 +1,4 @@
-package easyway2in.com.mynewapplication;
+package com.zemoso.rideapplication;
 
 /**
  * Created by zemoso on 11/1/16.

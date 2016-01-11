@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="easyway2in.com.mynewapplication">
+    package="com.zemoso.rideapplication">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -35,7 +35,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="easyway2in.com.mynewapplication.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -55,7 +55,7 @@
             android:parentActivityName=".ThirdActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="easyway2in.com.mynewapplication.ThirdActivity" />
+                android:value=".ThirdActivity" />
         </activity>
         <activity
             android:name=".RateCard"
@@ -64,7 +64,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="easyway2in.com.mynewapplication.ThirdActivity" />
+                android:value=".ThirdActivity" />
         </activity>
         <activity
             android:name=".FreeRides"
@@ -73,7 +73,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="easyway2in.com.mynewapplication.ThirdActivity" />
+                android:value=".ThirdActivity" />
         </activity>
         <activity
             android:name=".MyRides"
@@ -82,7 +82,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="easyway2in.com.mynewapplication.ThirdActivity" />
+                android:value=".ThirdActivity" />
         </activity>
         <activity
             android:name=".OffersActivity"
@@ -91,7 +91,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="easyway2in.com.mynewapplication.ThirdActivity" />
+                android:value=".ThirdActivity" />
         </activity>
         <activity
             android:name=".OlaMoney"
@@ -100,7 +100,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="easyway2in.com.mynewapplication.ThirdActivity" />
+                android:value=".ThirdActivity" />
         </activity>
     </application>
 

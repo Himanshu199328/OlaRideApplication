@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "easyway2in.com.mynewapplication"
+        applicationId "com.zemoso.rideapplication"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1

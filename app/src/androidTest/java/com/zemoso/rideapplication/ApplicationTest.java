@@ -1,4 +1,4 @@
-package easyway2in.com.mynewapplication;
+package com.zemoso.rideapplication;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
