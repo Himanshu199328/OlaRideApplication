@@ -262,8 +262,10 @@ public class ThirdActivity extends AppCompatActivity
         }
     }
 
+
     public void clickOnRideNow(View view){
-//        AlertDialog.Builder builder1 = new AlertDialog.Builder(ThirdActivity.this);
+
+ //       AlertDialog.Builder builder1 = new AlertDialog.Builder(ThirdActivity.this);
 //        builder1.setMessage("Your Ride has been booked");
 //        builder1.setCancelable(true);
 //
