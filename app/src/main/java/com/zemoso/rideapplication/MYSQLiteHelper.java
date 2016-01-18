@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -22,7 +21,7 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
     private static final String DATABASE_NAME = "db";
     private static final String TABLE_DISPLAYS = "displays";
     private static final String KEY_ID = "id";
-    private static final String KEY_USERNAME = "username";//name should be small letters
+    private static final String KEY_USERNAME = "username";//
     private static final String KEY_MOBILENUMBER = "mobilenumber";
     private static final String KEY_STARTINGPLACE = "startingplace";
     private static final String KEY_RIDEDISTANCE = "ridedistance";
@@ -39,15 +38,18 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_DISPLAY_TABLE = "CREATE TABLE displays ( " +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "username TEXT, "+
+
+
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "username TEXT,"+
                 "mobilenumber TEXT,"+
                 "startingplace TEXT,"+
                 "ridedistance TEXT,"+
                 "timetaken TEXT,"+
                 "waitingtime TEXT,"+
                 "cabtype TEXT)";
-        db.execSQL(CREATE_DISPLAY_TABLE);
+                db.execSQL(CREATE_DISPLAY_TABLE);;
+
     }
 
     @Override
@@ -57,23 +59,22 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
     }
     public void addDisplay(Display display ){
         Log.d("addDisplay", display.toString());
+
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_USERNAME,display.getUsername());
-        values.put(KEY_MOBILENUMBER, display.getMobilenumber());
-        values.put(KEY_STARTINGPLACE, display.getStartingplace());
-        values.put(KEY_RIDEDISTANCE,display.getRidedistance() );
+        values.put(KEY_MOBILENUMBER,display.getMobilenumber());
+        values.put(KEY_STARTINGPLACE,display.getStartingplace());
+        values.put(KEY_RIDEDISTANCE,display.getRidedistance());
         values.put(KEY_TIMETAKEN,display.getTimetaken());
-        values.put(KEY_WAITINGTIME, display.getWaitingtime());
-        values.put(KEY_CABTYPE, display.getCabtype());
-        db.insert(TABLE_DISPLAYS, null, values);
-
+        values.put(KEY_WAITINGTIME,display.getWaitingtime());
+        values.put(KEY_CABTYPE,display.getCabtype());
         db.close();
     }
 
     public Display getDisplay(int id){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_DISPLAYS, COLUMNS, " id = ?", new String[] { String.valueOf(id) }, null, null, null, null);
+        Cursor cursor = db.query(TABLE_DISPLAYS, COLUMNS, " id = ?", new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
         Display display = new Display();
@@ -91,12 +92,8 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
     public List<Display> getAllDisplay() {
         List<Display> display = new ArrayList<Display>();
         String query = "SELECT  * FROM " + TABLE_DISPLAYS;
-
-        // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query,null);
-
-
         Display Display = null;
         if (cursor.moveToFirst()) {
             do {
@@ -106,13 +103,15 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
                 Display.setMobilenumber(cursor.getString(2));
                 Display.setStartingplace(cursor.getString(3));
                 Display.setRidedistance(cursor.getString(4));
-                Display.setWaitingtime(cursor.getString(5));
-                Display.setTimetaken(cursor.getString(6));
+                Display.setTimetaken(cursor.getString(5));
+                Display.setWaitingtime(cursor.getString(6));
+                Display.setCabtype(cursor.getString(7));
                 Display.setCabtype(cursor.getString(7));
                 display.add(Display);
             }
             while (cursor.moveToNext());
-        }
+            }
+
 
         db.close();
         cursor.close();
@@ -135,6 +134,7 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
         return i;
 
     }
+
 
     public void deleteDisplay(Display display) {
 
