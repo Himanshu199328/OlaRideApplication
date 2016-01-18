@@ -3,6 +3,7 @@ package com.zemoso.rideapplication;
 import android.Manifest;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,8 +19,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +37,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class ThirdActivity extends AppCompatActivity
@@ -47,6 +51,7 @@ public class ThirdActivity extends AppCompatActivity
     protected LocationListener locationListener;
     EditText loca;
     MYSQLiteHelper db;
+    Address currentAddress ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +188,7 @@ public class ThirdActivity extends AppCompatActivity
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+
                 showCurrentLocation(location);
 
             }
@@ -221,7 +227,16 @@ public class ThirdActivity extends AppCompatActivity
     }
 
     private void showCurrentLocation(Location location){
-
+        List<Address> addressList = null;
+        if(location != null) {
+            Geocoder geocoder = new Geocoder(this);
+            try {
+                addressList = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        currentAddress = addressList.get(0);
         mMap.clear();
         LatLng currentPosition = new LatLng(location.getLatitude(),location.getLongitude());
         mMap.addMarker(new MarkerOptions()
@@ -244,7 +259,9 @@ public class ThirdActivity extends AppCompatActivity
                 e.printStackTrace();
             }
             Address address = addressList.get(0);
+            currentAddress = address;
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
             mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         }
@@ -265,20 +282,26 @@ public class ThirdActivity extends AppCompatActivity
 
     public void clickOnRideNow(View view){
 
- //       AlertDialog.Builder builder1 = new AlertDialog.Builder(ThirdActivity.this);
-//        builder1.setMessage("Your Ride has been booked");
-//        builder1.setCancelable(true);
-//
-//        builder1.setPositiveButton(
-//                "OK",
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        dialog.cancel();
-//                    }
-//                });
-//
-//        AlertDialog alert11 = builder1.create();
-//        alert11.show();
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(ThirdActivity.this);
+        builder1.setMessage("Your Ride has been booked");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        addToDatabase();
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+
+    }
+
+    private void addToDatabase(){
+
 
         Display userDetails = new Display();
         userDetails.setMobilenumber(sharedPreferences.getString(MainActivity.mobileNumberKey, "android"));
@@ -287,7 +310,18 @@ public class ThirdActivity extends AppCompatActivity
         userDetails.setUsername(sharedPreferences.getString(MainActivity.firstNameKey, "android"));
         userDetails.setTimetaken("20 mins");
         userDetails.setWaitingtime("5min");
-        userDetails.setStartingplace("Gachibowli");
+        String address = currentAddress.getAddressLine(0);
+        if(currentAddress.getAddressLine(1) !=null){
+            address = address + " " + currentAddress.getAddressLine(1);
+        }
+        if(currentAddress.getAddressLine(2) !=null){
+            address = address + " " + currentAddress.getAddressLine(2);
+        }
+        if(currentAddress.getAddressLine(3) !=null){
+            address = address + " " + currentAddress.getAddressLine(3);
+        }
+        userDetails.setStartingplace(address);
+        userDetails.setBoookingTime(new Timestamp(System.currentTimeMillis()));
         db.addDisplay(userDetails);
     }
 

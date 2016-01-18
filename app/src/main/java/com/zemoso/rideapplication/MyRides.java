@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -24,7 +25,9 @@ public class MyRides extends AppCompatActivity {
         setContentView(R.layout.activity_my_rides);
        // ArrayList<Display> displays = GetDisplays();
         final ListView L1 = (ListView) findViewById(R.id.ListView01);
+        db = new MYSQLiteHelper(this);
         ArrayList<Display> users = (ArrayList<Display>) db.getAllDisplay();
+        Log.d("Arraylist Size :",String.valueOf(users.size()));
         L1.setAdapter(new MyCustomBaseAdapter(this, users));
         L1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -39,7 +42,6 @@ public class MyRides extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        db = new MYSQLiteHelper(this);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

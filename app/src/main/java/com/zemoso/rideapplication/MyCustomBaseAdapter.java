@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -56,7 +57,8 @@ public class MyCustomBaseAdapter extends BaseAdapter {
         String ridedistance = displayArrayList.get(position).getRidedistance();
         String timetaken  = displayArrayList.get(position).getTimetaken();
         String cabtype = displayArrayList.get(position).getCabtype();
-        holder.txtUsername.setText(username + " with mobile no " + mobilenumber + " started from" + startingplace + " with cab type "  + cabtype);
+        Timestamp bookingTime = displayArrayList.get(position).getBoookingTime();
+        holder.txtUsername.setText( bookingTime + " from " + startingplace + " with cab type "  + cabtype);
         holder.txtMobilenumber.setText("Time Taken : " + timetaken +" and ride distance " + ridedistance);
 //        holder.txtStartingplace.setText(displayArrayList.get(position).getStartingplace());
 //        holder.txtRidedistance.setText(displayArrayList.get(position).getRidedistance());

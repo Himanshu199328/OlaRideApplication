@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +30,9 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
     private static final String KEY_TIMETAKEN = "timetaken";
     private static final String KEY_WAITINGTIME = "waitingtime";
     private static final String KEY_CABTYPE = "cabtype";
+    private static final String KEY_BOOKINGTIME = "bookingtime";
     private static final String[] COLUMNS = {KEY_ID,KEY_USERNAME,KEY_MOBILENUMBER,KEY_STARTINGPLACE,KEY_RIDEDISTANCE,KEY_TIMETAKEN,
-    KEY_WAITINGTIME,KEY_CABTYPE};
+    KEY_WAITINGTIME,KEY_CABTYPE,KEY_BOOKINGTIME};
 
 
     public MYSQLiteHelper(Context context) {
@@ -47,7 +50,8 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
                 "ridedistance TEXT,"+
                 "timetaken TEXT,"+
                 "waitingtime TEXT,"+
-                "cabtype TEXT)";
+                "cabtype TEXT , " +
+                "bookingtime Timestamp)";
                 db.execSQL(CREATE_DISPLAY_TABLE);;
 
     }
@@ -69,6 +73,8 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
         values.put(KEY_TIMETAKEN,display.getTimetaken());
         values.put(KEY_WAITINGTIME,display.getWaitingtime());
         values.put(KEY_CABTYPE,display.getCabtype());
+        values.put(KEY_BOOKINGTIME,display.getBoookingTime().getTime());
+        db.insert(TABLE_DISPLAYS, null, values);
         db.close();
     }
 
@@ -106,13 +112,11 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
                 Display.setTimetaken(cursor.getString(5));
                 Display.setWaitingtime(cursor.getString(6));
                 Display.setCabtype(cursor.getString(7));
-                Display.setCabtype(cursor.getString(7));
+                Display.setBoookingTime(new Timestamp(cursor.getLong(8)));
                 display.add(Display);
             }
             while (cursor.moveToNext());
             }
-
-
         db.close();
         cursor.close();
         return display;

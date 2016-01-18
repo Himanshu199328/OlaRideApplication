@@ -1,5 +1,7 @@
 package com.zemoso.rideapplication;
 
+import java.sql.Timestamp;
+
 /**
  * Created by zemoso on 11/1/16.
  */
@@ -15,6 +17,15 @@ public class Display {
     private String waitingtime;
     private String destination;
     private String cabtype;
+    private Timestamp boookingTime ;
+
+    public Timestamp getBoookingTime() {
+        return boookingTime;
+    }
+
+    public void setBoookingTime(Timestamp boookingTime) {
+        this.boookingTime = boookingTime;
+    }
 
     public Display(){}
 
