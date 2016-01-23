@@ -14,10 +14,7 @@
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_attach_money_24dp"
             android:title="Rate card" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_wallet_giftcard_24dp"
-            android:title="ola Money" />
+
         <item
             android:id="@+id/nav_slideshow1"
             android:icon="@drawable/ic_wallet_giftcard_24dp"

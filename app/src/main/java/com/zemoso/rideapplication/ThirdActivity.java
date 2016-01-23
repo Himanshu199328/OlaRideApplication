@@ -22,7 +22,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,7 +57,7 @@ public class ThirdActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.third_layout);
          db = new MYSQLiteHelper(this);
-        
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -153,9 +152,7 @@ public class ThirdActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
             Intent intent = new Intent(this,RateCard.class);
             startActivity(intent);
-        } else if (id == R.id.nav_manage) {
-            Intent intent = new Intent(this,OlaMoney.class);
-            startActivity(intent);
+
         } else if (id == R.id.nav_slideshow1) {
             Intent intent = new Intent(this,OffersActivity.class);
             startActivity(intent);
@@ -300,9 +297,8 @@ public class ThirdActivity extends AppCompatActivity
 
     }
 
+
     private void addToDatabase(){
-
-
         Display userDetails = new Display();
         userDetails.setMobilenumber(sharedPreferences.getString(MainActivity.mobileNumberKey, "android"));
         userDetails.setCabtype("Mini");
@@ -321,8 +317,23 @@ public class ThirdActivity extends AppCompatActivity
             address = address + " " + currentAddress.getAddressLine(3);
         }
         userDetails.setStartingplace(address);
-        userDetails.setBoookingTime(new Timestamp(System.currentTimeMillis()));
+        userDetails.setBoookingTime(new Timestamp(System.currentTimeMillis()));//Time stamp is used to set date time
         db.addDisplay(userDetails);
-    }
 
-}
+
+
+
+
+
+
+
+
+
+        }
+
+    };
+
+
+
+
+

@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +96,7 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
     }
     public List<Display> getAllDisplay() {
         List<Display> display = new ArrayList<Display>();
-        String query = "SELECT  * FROM " + TABLE_DISPLAYS;
+        String query = "SELECT  * FROM " + TABLE_DISPLAYS+" Order by id DESC";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query,null);
         Display Display = null;

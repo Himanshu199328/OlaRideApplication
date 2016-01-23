@@ -93,15 +93,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ThirdActivity" />
         </activity>
-        <activity
-            android:name=".OlaMoney"
-            android:label="@string/title_activity_ola_money"
-            android:parentActivityName=".ThirdActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ThirdActivity" />
-        </activity>
     </application>
 
 </manifest>
