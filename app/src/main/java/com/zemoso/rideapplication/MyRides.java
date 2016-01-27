@@ -54,9 +54,8 @@ public class MyRides extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-       // List<Display> userRides = db.getAllDisplay();
-       // textView.setText("Total User Rides :" + userRides.size());
-        // textView.setText("Total number ofrides available");
+       // ;
+
 
 
     }

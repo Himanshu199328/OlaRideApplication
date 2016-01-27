@@ -2,9 +2,15 @@
 
 buildscript {
     repositories {
+
+        flatDir{
+            dirs 'libs'
+        }
+
         jcenter()
     }
     dependencies {
+
         classpath 'com.android.tools.build:gradle:1.5.0'
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -14,6 +20,9 @@ buildscript {
 
 allprojects {
     repositories {
+        flatDir{
+            dirs 'libs'
+        }
         jcenter()
     }
 }

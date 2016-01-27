@@ -62,8 +62,10 @@ public class MyCustomBaseAdapter extends BaseAdapter {
         String timetaken  = displayArrayList.get(position).getTimetaken();
         String cabtype = displayArrayList.get(position).getCabtype();
         Timestamp bookingTime = displayArrayList.get(position).getBoookingTime();
+         // GET CURRENT TIME BY USING TIME STAMP
         long currentTimeMillis = System.currentTimeMillis();
         long timeDiffBooking = currentTimeMillis - bookingTime.getTime();
+        //FROM NOW
         long hoursDifference = (timeDiffBooking/1000)/3600;
         if(hoursDifference>24){
             Calendar calendar = Calendar.getInstance();
@@ -83,7 +85,49 @@ public class MyCustomBaseAdapter extends BaseAdapter {
             }
             int month = calendar.get(Calendar.MONTH) +1;
             int date = calendar.get(Calendar.DATE);
-            String properdate = hours + ":" + minutes + " " + ampm + " " + date + " -" + month;
+
+            String monthname = " ";
+            if (month == 1){
+                monthname = "January";
+            }
+            else if (month == 2){
+                monthname = "February";
+            }
+            else if (month == 3)
+            {
+                monthname = "March";
+            }
+            else if (month == 4){
+                monthname = "April";
+            }
+            else if (month == 5){
+
+                monthname = "May";
+            }
+            else if (month == 6){
+                monthname = "June";
+            }
+            else if (month == 7){
+                monthname = "July";
+            }
+            else if (month == 8){
+                monthname = "August";
+            }
+            else if (month == 9){
+                monthname = "September";
+            }
+            else if (month == 10){
+                monthname = "October";
+            }
+            else if (month == 11){
+                monthname = "November";
+            }
+            else if (month == 12)
+            {
+                monthname = "December";
+            }
+
+            String properdate = hours + ":" + minutes + " " + ampm + " " + date + " -" + monthname;
             holder.txtMobilenumber.setText(properdate+ " with cab type " + cabtype);
         }
         else {
@@ -96,6 +140,8 @@ public class MyCustomBaseAdapter extends BaseAdapter {
                     long seconds = timeDiffBooking/1000;
                     holder.txtMobilenumber.setText(seconds + " seconds from now "+ " with cab type " + cabtype);
                 }
+
+
             }
 
         }

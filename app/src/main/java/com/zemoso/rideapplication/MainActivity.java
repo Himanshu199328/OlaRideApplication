@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.zemosolabs.zetarget.sdk.ZeTarget;
+
 public class MainActivity extends AppCompatActivity {
     public final static String MESSAGE_KEY="easyway2in.com.mynewapplication.message_key";
 
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ZeTarget.initializeWithContextAndKey(getApplicationContext(),"ZemosoL");
         sharedPreferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
 
         if(sharedPreferences.contains(firstNameKey)&&sharedPreferences.contains(mobileNumberKey)){
