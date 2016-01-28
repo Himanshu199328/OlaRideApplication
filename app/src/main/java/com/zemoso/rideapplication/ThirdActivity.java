@@ -42,6 +42,7 @@ import java.util.List;
 public class ThirdActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback{
 
+
     SharedPreferences sharedPreferences;
     TextView headerText;
     TextView subHeaderText;
@@ -51,6 +52,8 @@ public class ThirdActivity extends AppCompatActivity
     EditText loca;
     MYSQLiteHelper db;
     Address currentAddress ;
+  boolean isSearching = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,13 +185,19 @@ public class ThirdActivity extends AppCompatActivity
         Criteria criteria = new Criteria();
         criteria.setAccuracy(criteria.ACCURACY_FINE);
         String provider = locationManager.getBestProvider(criteria, true);
+
         LocationListener locationListener = new LocationListener() {
             @Override
-            public void onLocationChanged(Location location) {
+            public void onLocationChanged (Location location)
 
-                showCurrentLocation(location);
+
+            {
+                if(!isSearching) {
+                    showCurrentLocation(location);
+                }
 
             }
+
 
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {
@@ -248,20 +257,27 @@ public class ThirdActivity extends AppCompatActivity
          loca = (EditText) findViewById(R.id.editText);
         String location1  =  loca.getText().toString();
         List<Address> addressList = null;
-        if (location1 !=null && !location1.equals("")){
-            Geocoder geocoder = new Geocoder(this);
-            try {
-                addressList = geocoder.getFromLocationName(location1, 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Address address = addressList.get(0);
-            currentAddress = address;
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
 
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        }
+        if
+
+            (location1 != null && !location1.equals("")) {
+            isSearching = true;
+            Geocoder geocoder = new Geocoder(this);
+                try {
+                    addressList = geocoder.getFromLocationName(location1, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Address address = addressList.get(0);
+                currentAddress = address;
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            }
+
         else{
             setUpMap();
         }
@@ -289,11 +305,14 @@ public class ThirdActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int id) {
                         addToDatabase();
                         dialog.cancel();
+
+
                     }
                 });
 
         AlertDialog alert11 = builder1.create();
         alert11.show();
+
 
     }
 

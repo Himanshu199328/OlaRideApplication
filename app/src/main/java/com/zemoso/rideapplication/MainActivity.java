@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ZeTarget.initializeWithContextAndKey(getApplicationContext(),"ZemosoL");
+        ZeTarget.initializeWithContextAndKey(getApplicationContext(),"b5771f64-a917-4630-851c-c064a54369d2");
         sharedPreferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
 
         if(sharedPreferences.contains(firstNameKey)&&sharedPreferences.contains(mobileNumberKey)){
