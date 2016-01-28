@@ -1,6 +1,7 @@
 package com.zemoso.rideapplication;
 
 import android.Manifest;
+import android.app.Application;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,9 +14,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -72,6 +76,7 @@ public class ThirdActivity extends AppCompatActivity
 //                        .setAction("Action", null).show();
 //            }
 //        });
+
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
@@ -242,15 +247,29 @@ public class ThirdActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
-        currentAddress = addressList.get(0);
-        mMap.clear();
-        LatLng currentPosition = new LatLng(location.getLatitude(),location.getLongitude());
-        mMap.addMarker(new MarkerOptions()
-                .position(currentPosition)
-                .title("Marker"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18));
+        if(addressList!=null && !addressList.isEmpty()) {
+            currentAddress = addressList.get(0);
+            mMap.clear();
+            LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .position(currentPosition)
+                    .title("Marker"));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18));
+        }
+        else{
+            if(!isNetworkAvailable(this)) {
+                Toast.makeText(this, "No Internet connection", Toast.LENGTH_LONG).show();
+                finish(); //Calling this method to close this activity when internet is not available.
+            }
+        }
     }
-
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(conMan.getActiveNetworkInfo() != null && conMan.getActiveNetworkInfo().isConnected())
+            return true;
+        else
+            return false;
+    }
     public void onSearch(View view) {
 
 
@@ -268,13 +287,14 @@ public class ThirdActivity extends AppCompatActivity
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                if(addressList!=null&&!addressList.isEmpty()) {
+                    Address address = addressList.get(0);
+                    currentAddress = address;
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
 
-                Address address = addressList.get(0);
-                currentAddress = address;
-                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-
-                mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                    mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                }
 
             }
 
