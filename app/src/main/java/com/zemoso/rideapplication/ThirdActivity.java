@@ -345,15 +345,20 @@ public class ThirdActivity extends AppCompatActivity
         userDetails.setUsername(sharedPreferences.getString(MainActivity.firstNameKey, "android"));
         userDetails.setTimetaken("20 mins");
         userDetails.setWaitingtime("5min");
-        String address = currentAddress.getAddressLine(0);
-        if(currentAddress.getAddressLine(1) !=null){
-            address = address + " " + currentAddress.getAddressLine(1);
-        }
-        if(currentAddress.getAddressLine(2) !=null){
-            address = address + " " + currentAddress.getAddressLine(2);
-        }
-        if(currentAddress.getAddressLine(3) !=null){
-            address = address + " " + currentAddress.getAddressLine(3);
+        String address = "No Address";
+        if(currentAddress != null){
+            if (currentAddress.getAddressLine(0) != null) {
+                address = currentAddress.getAddressLine(0);
+            }
+            if (currentAddress.getAddressLine(1) != null) {
+                address = address + " " + currentAddress.getAddressLine(1);
+            }
+            if (currentAddress.getAddressLine(2) != null) {
+                address = address + " " + currentAddress.getAddressLine(2);
+            }
+            if (currentAddress.getAddressLine(3) != null) {
+                address = address + " " + currentAddress.getAddressLine(3);
+            }
         }
         userDetails.setStartingplace(address);
         userDetails.setBoookingTime(new Timestamp(System.currentTimeMillis()));//Time stamp is used to set date time
