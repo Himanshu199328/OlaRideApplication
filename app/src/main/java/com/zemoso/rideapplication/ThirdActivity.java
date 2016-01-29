@@ -13,6 +13,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -27,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -232,24 +234,39 @@ public class ThirdActivity extends AppCompatActivity
         }
     }
 
-    private void showCurrentLocation(Location location){
+    private void showCurrentLocation(Location location) {
         List<Address> addressList = null;
-        if(location != null) {
+        if (location != null) {
             Geocoder geocoder = new Geocoder(this);
             try {
-                addressList = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        currentAddress = addressList.get(0);
-        mMap.clear();
-        LatLng currentPosition = new LatLng(location.getLatitude(),location.getLongitude());
-        mMap.addMarker(new MarkerOptions()
-                .position(currentPosition)
-                .title("Marker"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18));
+        if (addressList != null && !addressList.isEmpty()) {
+            currentAddress = addressList.get(0);
+            mMap.clear();
+            LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .position(currentPosition)
+                    .title("Marker"));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18));
+        } else {
+            if (!isNetworkAvailable(this)) {
+                Toast.makeText(this, "No Internet connection", Toast.LENGTH_LONG).show();
+                finish(); //Calling this method to close this activity when internet is not available.
+            }
+        }
     }
+        public static boolean isNetworkAvailable(Context context) {
+                    ConnectivityManager conMan = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    if(conMan.getActiveNetworkInfo() != null && conMan.getActiveNetworkInfo().isConnected())
+                            return true;
+                 else
+                        return false;
+
+        }
 
     public void onSearch(View view) {
 
@@ -276,7 +293,7 @@ public class ThirdActivity extends AppCompatActivity
                 mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
-            }
+        }
 
         else{
             setUpMap();
@@ -325,7 +342,13 @@ public class ThirdActivity extends AppCompatActivity
         userDetails.setUsername(sharedPreferences.getString(MainActivity.firstNameKey, "android"));
         userDetails.setTimetaken("20 mins");
         userDetails.setWaitingtime("5min");
-        String address = currentAddress.getAddressLine(0);
+        String address = "No Address";
+        if(currentAddress != null){
+            if (currentAddress.getAddressLine(0) != null) {
+                address = currentAddress.getAddressLine(0);
+            }
+        }
+
         if(currentAddress.getAddressLine(1) !=null){
             address = address + " " + currentAddress.getAddressLine(1);
         }
@@ -339,16 +362,7 @@ public class ThirdActivity extends AppCompatActivity
         userDetails.setBoookingTime(new Timestamp(System.currentTimeMillis()));//Time stamp is used to set date time
         db.addDisplay(userDetails);
 
-
-
-
-
-
-
-
-
-
-        }
+    }
 
     };
 
