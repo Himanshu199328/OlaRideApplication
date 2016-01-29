@@ -242,13 +242,18 @@ public class ThirdActivity extends AppCompatActivity
                 e.printStackTrace();
             }
         }
-        currentAddress = addressList.get(0);
-        mMap.clear();
-        LatLng currentPosition = new LatLng(location.getLatitude(),location.getLongitude());
-        mMap.addMarker(new MarkerOptions()
-                .position(currentPosition)
-                .title("Marker"));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18));
+        if(addressList.isEmpty()){
+
+        }
+        else {
+            currentAddress = addressList.get(0);
+            mMap.clear();
+            LatLng currentPosition = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .position(currentPosition)
+                    .title("Marker"));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18));
+        }
     }
 
     public void onSearch(View view) {
