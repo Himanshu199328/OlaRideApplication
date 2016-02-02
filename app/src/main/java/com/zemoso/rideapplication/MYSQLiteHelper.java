@@ -120,7 +120,6 @@ public class MYSQLiteHelper extends SQLiteOpenHelper
         cursor.close();
         return display;
     }
-
     public int updateDisplay(Display display) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

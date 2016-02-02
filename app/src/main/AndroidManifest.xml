@@ -66,6 +66,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
         <activity
             android:name=".SettingsActivity"
@@ -75,6 +76,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ThirdActivity" />
         </activity>
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
         <activity
             android:name=".RateCard"
             android:label="@string/title_activity_rate_card"

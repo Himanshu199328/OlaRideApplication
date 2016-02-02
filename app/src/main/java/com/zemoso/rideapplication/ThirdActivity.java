@@ -251,7 +251,8 @@ public class ThirdActivity extends AppCompatActivity
             mMap.addMarker(new MarkerOptions()
                     .position(currentPosition)
                     .title("Marker"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 18)
+            );
         } else {
             if (!isNetworkAvailable(this)) {
                 Toast.makeText(this, "No Internet connection", Toast.LENGTH_LONG).show();
@@ -280,11 +281,15 @@ public class ThirdActivity extends AppCompatActivity
             (location1 != null && !location1.equals("")) {
             isSearching = true;
             Geocoder geocoder = new Geocoder(this);
-                try {
-                    addressList = geocoder.getFromLocationName(location1, 1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                addressList = geocoder.getFromLocationName(location1, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+            if (addressList != null && !addressList.isEmpty()) {
 
                 Address address = addressList.get(0);
                 currentAddress = address;
@@ -293,6 +298,7 @@ public class ThirdActivity extends AppCompatActivity
                 mMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
+            }
         }
 
         else{
@@ -300,7 +306,6 @@ public class ThirdActivity extends AppCompatActivity
         }
 
     }
-
     public void changeType (View view){
         if (mMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
             mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
@@ -308,6 +313,9 @@ public class ThirdActivity extends AppCompatActivity
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
     }
+
+
+
 
 
     public void clickOnRideNow(View view){
@@ -343,20 +351,22 @@ public class ThirdActivity extends AppCompatActivity
         userDetails.setTimetaken("20 mins");
         userDetails.setWaitingtime("5min");
         String address = "No Address";
-        if(currentAddress != null){
+
+        if(currentAddress != null) {
             if (currentAddress.getAddressLine(0) != null) {
                 address = currentAddress.getAddressLine(0);
             }
-        }
 
-        if(currentAddress.getAddressLine(1) !=null){
-            address = address + " " + currentAddress.getAddressLine(1);
-        }
-        if(currentAddress.getAddressLine(2) !=null){
-            address = address + " " + currentAddress.getAddressLine(2);
-        }
-        if(currentAddress.getAddressLine(3) !=null){
-            address = address + " " + currentAddress.getAddressLine(3);
+
+            if (currentAddress.getAddressLine(1) != null) {
+                address = address + " " + currentAddress.getAddressLine(1);
+            }
+            if (currentAddress.getAddressLine(2) != null) {
+                address = address + " " + currentAddress.getAddressLine(2);
+            }
+            if (currentAddress.getAddressLine(3) != null) {
+                address = address + " " + currentAddress.getAddressLine(3);
+            }
         }
         userDetails.setStartingplace(address);
         userDetails.setBoookingTime(new Timestamp(System.currentTimeMillis()));//Time stamp is used to set date time

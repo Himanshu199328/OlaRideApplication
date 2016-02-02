@@ -2,6 +2,8 @@
 
 buildscript {
     repositories {
+        mavenCentral()
+
 
         flatDir{
             dirs 'libs'
@@ -10,6 +12,7 @@ buildscript {
         jcenter()
     }
     dependencies {
+
 
         classpath 'com.android.tools.build:gradle:1.5.0'
 
@@ -20,6 +23,7 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral()
         flatDir{
             dirs 'libs'
         }

@@ -1,6 +1,5 @@
 package com.zemoso.rideapplication;
 
-import android.*;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,12 +9,22 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.zemosolabs.zetarget.sdk.ZeTarget;
 
 
@@ -33,13 +42,39 @@ public class MainActivity extends AppCompatActivity {
     EditText message1_text;
     EditText EmailId;
     EditText Mobilenumber;
-
+    LoginButton loginButton;
+    CallbackManager callbackManager;
     SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
        ZeTarget.initializeWithContextAndKey(getApplicationContext(), "b5771f64-a917-4630-851c-c064a54369d2");
+
+        callbackManager = CallbackManager.Factory.create();
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+
+
+
+
+
         sharedPreferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
 
         if(sharedPreferences.contains(firstNameKey)&&sharedPreferences.contains(mobileNumberKey)){
@@ -69,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         //Here you need to get the shared preferences using the key MYPREFERENCES .
         sharedPreferences = getSharedPreferences(MYPREFERENCES,Context.MODE_PRIVATE);
         //get the value of firstname from the shared pred using the firstNameKey and setting it in the editText message_text
-        message_text.setText(sharedPreferences.getString(firstNameKey,null));//default value is assigned null . So that hint can show up
+        message_text.setText(sharedPreferences.getString(firstNameKey, null));//default value is assigned null . So that hint can show up
         message1_text.setText(sharedPreferences.getString(lastNameKey,null));
         EmailId.setText(sharedPreferences.getString(emailKey, null));
         Mobilenumber.setText(sharedPreferences.getString(mobileNumberKey, null));
