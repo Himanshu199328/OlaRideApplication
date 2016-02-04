@@ -9,20 +9,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.zemosolabs.zetarget.sdk.ZeTarget;
@@ -50,31 +48,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        //Zetarget sdk is inialize ....by id
        ZeTarget.initializeWithContextAndKey(getApplicationContext(), "b5771f64-a917-4630-851c-c064a54369d2");
 
         callbackManager = CallbackManager.Factory.create();
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
 
-            }
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        Intent intent = new Intent(getApplicationContext(),ThirdActivity.class);
+                        startActivity(intent);
 
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-            }
-        });
+                    }
 
 
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
 
-
-
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                    }
+                });
         sharedPreferences = getSharedPreferences(MYPREFERENCES, Context.MODE_PRIVATE);
 
         if(sharedPreferences.contains(firstNameKey)&&sharedPreferences.contains(mobileNumberKey)){
@@ -82,17 +80,23 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this,ThirdActivity.class);
             startActivity(intent);
         }
+        if(AccessToken.getCurrentAccessToken() != null){
+            Intent intent = new Intent(this,ThirdActivity.class);
+           startActivity(intent);
 
-
-        if (ContextCompat.checkSelfPermission(MainActivity.this,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,},
-                    REQUEST_CODE_LOCATION_PERM);
         }
+
+
+//
+//        if (ContextCompat.checkSelfPermission(MainActivity.this,
+//                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(MainActivity.this,
+//                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,},
+//                    REQUEST_CODE_LOCATION_PERM);
+//        }
 
         setContentView(R.layout.activity_main);
 
@@ -107,12 +111,14 @@ public class MainActivity extends AppCompatActivity {
         message_text.setText(sharedPreferences.getString(firstNameKey, null));//default value is assigned null . So that hint can show up
         message1_text.setText(sharedPreferences.getString(lastNameKey,null));
         EmailId.setText(sharedPreferences.getString(emailKey, null));
-        Mobilenumber.setText(sharedPreferences.getString(mobileNumberKey, null));
+        Mobilenumber.setText(sharedPreferences.getString(mobileNumberKey,null));
 
 
-
-
-
+                }
+    @Override
+    protected void onActivityResult ( int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
     public void sendMessage(View view)
     {
@@ -142,6 +148,16 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(MESSAGE_KEY, eI);
         intent.putExtra(MESSAGE_KEY, Mn);
         startActivity(intent);
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,},
+                    REQUEST_CODE_LOCATION_PERM);
+        }
 
 
 

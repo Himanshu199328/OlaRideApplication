@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -161,12 +162,18 @@ public class ThirdActivity extends AppCompatActivity
         } else if (id == R.id.nav_slideshow1) {
             Intent intent = new Intent(this,OffersActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_send) {
-            Intent intent = new Intent(this,FreeRides.class);
+        } else if (id == R.id.nav_manage1) {
+            Intent intent = new Intent(this, FreeRides.class);
             startActivity(intent);
-        }else if (id == R.id.nav_share) {
+        }else if (id == R.id.nav_manage2) {
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+            LoginManager.getInstance().logOut();
+            getBaseContext().getSharedPreferences(MainActivity.MYPREFERENCES,Context.MODE_PRIVATE).edit().clear().commit();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
 
-        } else if (id == R.id.nav_send) {
+
 
         }
 
