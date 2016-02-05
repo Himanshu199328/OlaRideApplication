@@ -3,11 +3,13 @@ package com.zemoso.rideapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +26,9 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.zemosolabs.zetarget.sdk.ZeTarget;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -50,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         //Zetarget sdk is inialize ....by id
        ZeTarget.initializeWithContextAndKey(getApplicationContext(), "b5771f64-a917-4630-851c-c064a54369d2");
+        ZeTarget.enableDebugging();
 
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager,
@@ -57,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        Intent intent = new Intent(getApplicationContext(),ThirdActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), ThirdActivity.class);
                         startActivity(intent);
 
                     }
@@ -85,7 +91,20 @@ public class MainActivity extends AppCompatActivity {
            startActivity(intent);
 
         }
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.zemoso.rideapplication",
+                    PackageManager.GET_SIGNATURES);
+            for (android.content.pm.Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
 
+        } catch (NoSuchAlgorithmException e) {
+
+        }
 
 //
 //        if (ContextCompat.checkSelfPermission(MainActivity.this,
