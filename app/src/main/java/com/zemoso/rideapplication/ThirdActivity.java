@@ -1,14 +1,11 @@
 package com.zemoso.rideapplication;
 
-import android.Manifest;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
@@ -16,13 +13,13 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,7 +40,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class ThirdActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback{
+        implements NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,LocationListener{
 
 
     SharedPreferences sharedPreferences;
@@ -185,61 +182,149 @@ public class ThirdActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-       setUpMap();
+       setUpMap1();
     }
 
 
-    private void setUpMap() {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(criteria.ACCURACY_FINE);
-        String provider = locationManager.getBestProvider(criteria, true);
+    private void setUpMap1(){
+        boolean isGPSEnabled;
+        boolean isNetworkEnabled;
+        Location location;
+        try
+        {
+            locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
 
-        LocationListener locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged (Location location)
+            // getting GPS status
+            isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
+            // getting network status
+            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
+            if (!isGPSEnabled && !isNetworkEnabled)
             {
-                if(!isSearching) {
-                    showCurrentLocation(location);
+                // no network provider is enabled
+            }
+            else
+            {
+                if (isNetworkEnabled)
+                {
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 0, this);
+                    Log.d("Network", "Network");
+                    if (locationManager != null)
+                    {
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        if (location != null)
+                        {
+                            showCurrentLocation(location);
+                        }
+                    }
                 }
-
+                // if GPS Enabled get lat/long using GPS Services
+                if (isGPSEnabled)
+                {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 0, this);
+                    Log.d("GPS Enabled", "GPS Enabled");
+                    if (locationManager != null)
+                    {
+                        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if (location != null)
+                        {
+                            showCurrentLocation(location);
+                        }
+                    }
+                }
             }
 
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String s) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String s) {
-
-            }
-        };
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
         }
-        locationManager.requestLocationUpdates(provider, 2000, 0, locationListener);
-        Location location = locationManager.getLastKnownLocation(provider);
-        if (location != null) {
-            showCurrentLocation(location);
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
+//    private void setUpMap() {
+//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//        Criteria criteria = new Criteria();
+//        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+//        String provider = locationManager.getBestProvider(criteria, true);
+//
+//        LocationListener locationListener = new LocationListener() {
+//            @Override
+//            public void onLocationChanged (Location location)
+//
+//
+//            {
+//                if(!isSearching) {
+//                    showCurrentLocation(location);
+//                }
+//
+//            }
+//
+//
+//            @Override
+//            public void onStatusChanged(String s, int i, Bundle bundle) {
+//
+//            }
+//
+//            @Override
+//            public void onProviderEnabled(String s) {
+//                Log.d(s,s);
+//            }
+//
+//            @Override
+//            public void onProviderDisabled(String s) {
+//
+//            }
+//        };
+//
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+//        locationManager.requestLocationUpdates(provider, 2000, 0, locationListener);
+//        Location location = locationManager.getLastKnownLocation(provider);//
+//        if (location != null) {
+//            showCurrentLocation(location);
+//        }
+//        else {
+//            try {
+//                Log.d("Entered Try", "");
+//                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//                Location location1 = lm.getLastKnownLocation(Context.LOCATION_SERVICE);
+//                if (location1 != null) {
+//                    showCurrentLocation(location1);
+//                } else {
+//                    try {
+//                        String provider1 = LocationManager.NETWORK_PROVIDER;
+//                        LocationManager lm1 = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//                        Location location11 = lm1.getLastKnownLocation(provider1);
+//                        showCurrentLocation(location11);
+//                    } catch (Exception e1) {
+//                        e1.printStackTrace();
+//                        Toast.makeText(this, "Location not available\nSelect manually", Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//
+//            } catch (Exception e) {
+//                // Returns last known location, this is the fastest way to get a location fix.
+//                try {
+//                    String provider1 = LocationManager.NETWORK_PROVIDER;
+//                    LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//                    Location location1 = lm.getLastKnownLocation(provider1);
+//                    showCurrentLocation(location1);
+//                    e.printStackTrace();
+//                } catch (Exception e1) {
+//                    e1.printStackTrace();
+//                    Toast.makeText(this, "Location not available\nSelect manually", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        }
+//    }
 
     private void showCurrentLocation(Location location) {
         List<Address> addressList = null;
@@ -263,7 +348,7 @@ public class ThirdActivity extends AppCompatActivity
         } else {
             if (!isNetworkAvailable(this)) {
                 Toast.makeText(this, "No Internet connection", Toast.LENGTH_LONG).show();
-                finish(); //Calling this method to close this activity when internet is not available.
+                //Calling this method to close this activity when internet is not available.
             }
         }
     }
@@ -309,7 +394,7 @@ public class ThirdActivity extends AppCompatActivity
         }
 
         else{
-            setUpMap();
+            setUpMap1();
         }
 
     }
@@ -381,7 +466,30 @@ public class ThirdActivity extends AppCompatActivity
 
     }
 
-    };
+    @Override
+    public void onLocationChanged(Location location)
+    {
+                if(!isSearching) {
+                    showCurrentLocation(location);
+                }
+
+            }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+};
 
 
 
